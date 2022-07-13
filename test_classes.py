@@ -1,63 +1,64 @@
-class Television:
-    MIN_CHANNEL = 0     # Minimum TV channel
-    MAX_CHANNEL = 3     # Maximum TV channel
+from classes import *
 
-    MIN_VOLUME = 0      # Minimum TV volume
-    MAX_VOLUME = 2      # Maximum TV volume
+class Test:
+    def setup_method(self):
+        self.tv1 = Television()
 
-    def __init__(self):
-        self.__channel = 0
-        self.__volume = 0
-        self.__status = 'False'
+    def teardown_method(self):
+        del self.tv1
 
-    def power(self):
-        if self.__status == 'False':
-            self.__status = 'True'
-            return self.__status
-        if self.__status == 'True':
-            self.__status = 'False'
-            return self.__status
+    def test_init(self):
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
 
-    def channel_up(self):
-        if self.__status == 'True':
-            if self.__channel == Television.MAX_CHANNEL:
-                self.__channel = Television.MIN_CHANNEL
+    def test_power(self):
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
+        self.tv1.power()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 0, Volume = 0'
+        self.tv1.power()
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
+        self.tv1.power()
+        self.tv1.power()
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
 
-            elif self.__channel >= Television.MIN_CHANNEL:
-                self.__channel += 1
-        else:
-            return self.__channel
+    def test_channel_up(self):
+        self.tv1.channel_up()
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
+        self.tv1.power()
+        self.tv1.channel_up()
+        self.tv1.channel_up()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 2, Volume = 0'
+        self.tv1.channel_up()
+        self.tv1.channel_up()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 0, Volume = 0'
 
-    def channel_down(self):
-        if self.__status == 'True':
-            if self.__channel == Television.MIN_CHANNEL:
-                self.__channel = Television.MAX_CHANNEL
+    def test_channel_down(self):
+        self.tv1.channel_down()
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
+        self.tv1.power()
+        self.tv1.channel_down()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 3, Volume = 0'
+        self.tv1.channel_down()
+        self.tv1.channel_down()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 1, Volume = 0'
 
-            elif self.__channel <= Television.MAX_CHANNEL:
-                self.__channel -= 1
-        else:
-            return self.__channel
+    def test_volume_up(self):
+        self.tv1.volume_up()
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
+        self.tv1.power()
+        self.tv1.volume_up()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 0, Volume = 1'
+        self.tv1.volume_up()
+        self.tv1.volume_up()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 0, Volume = 2'
 
-    def volume_up(self):
-        if self.__status == 'True':
-            if self.__volume == Television.MAX_VOLUME:
-                return self.__volume
-
-            elif self.__volume >= Television.MIN_VOLUME:
-                self.__volume += 1
-        else:
-            return self.__volume
-
-    def volume_down(self):
-        if self.__status == 'True':
-            if self.__volume == Television.MIN_VOLUME:
-                return self.__volume
-
-            elif self.__volume <= Television.MAX_VOLUME:
-                self.__volume -= 1
-        else:
-            return self.__volume
-
-
-    def __str__(self):
-        return f'TV status: Is on = {self.__status}, Channel = {self.__channel}, Volume = {self.__volume}'
+    def test_volume_down(self):
+        self.tv1.volume_down()
+        assert self.tv1.__str__() == 'TV status: Is on = False, Channel = 0, Volume = 0'
+        self.tv1.power()
+        self.tv1.volume_down()
+        self.tv1.volume_down()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 0, Volume = 0'
+        self.tv1.volume_up()
+        self.tv1.volume_up()
+        self.tv1.volume_down()
+        assert self.tv1.__str__() == 'TV status: Is on = True, Channel = 0, Volume = 1'
