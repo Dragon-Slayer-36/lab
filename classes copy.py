@@ -14,9 +14,9 @@ class Television:
         Constructor to create initial state of a television object.   
         """
         
-        self.__channel = 0          #Default TV channel
-        self.__volume = 0           #Default TV volume
-        self.__status = 'False'     #Default TV power
+        self.__channel = Television.MIN_CHANNEL         #Default TV channel
+        self.__volume = Television.MIN_VOLUME           #Default TV volume
+        self.__status = False                           #Default TV power
 
     def power(self) -> str:
         """
@@ -24,12 +24,10 @@ class Television:
         :return: Television's power status.
         """
         
-        if self.__status == 'False':
-            self.__status = 'True'
-            return self.__status
-        if self.__status == 'True':
-            self.__status = 'False'
-            return self.__status
+        if self.__status == False:
+            self.__status = True
+        else:
+            self.__status = False
 
     def channel_up(self) -> int:
         """
@@ -37,14 +35,11 @@ class Television:
         :return: Television's channel number.
         """
         
-        if self.__status == 'True':
+        if self.__status == True:
             if self.__channel == Television.MAX_CHANNEL:
                 self.__channel = Television.MIN_CHANNEL
-
-            elif self.__channel >= Television.MIN_CHANNEL:
+            else:
                 self.__channel += 1
-        else:
-            return self.__channel
 
     def channel_down(self) -> int:
         """
@@ -52,14 +47,11 @@ class Television:
         :return: Television's channel number.        
         """
         
-        if self.__status == 'True':
+        if self.__status == True:
             if self.__channel == Television.MIN_CHANNEL:
                 self.__channel = Television.MAX_CHANNEL
-
-            elif self.__channel <= Television.MAX_CHANNEL:
+            else:
                 self.__channel -= 1
-        else:
-            return self.__channel
 
     def volume_up(self) -> int:
         """
@@ -67,14 +59,8 @@ class Television:
         :return: Television's volume number.
         """
         
-        if self.__status == 'True':
-            if self.__volume == Television.MAX_VOLUME:
-                return self.__volume
-
-            elif self.__volume >= Television.MIN_VOLUME:
-                self.__volume += 1
-        else:
-            return self.__volume
+        if self.__status == True and self.__volume < Television.MAX_VOLUME:
+            self.__volume += 1
 
     def volume_down(self) -> int:
         """
@@ -82,14 +68,8 @@ class Television:
         :return: Television's volume number.
         """
         
-        if self.__status == 'True':
-            if self.__volume == Television.MIN_VOLUME:
-                return self.__volume
-
-            elif self.__volume <= Television.MAX_VOLUME:
-                self.__volume -= 1
-        else:
-            return self.__volume
+        if self.__status == True and self.__volume > Television.MIN_VOLUME:
+            self.__volume -= 1
 
 
     def __str__(self) -> str:
